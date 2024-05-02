@@ -14,7 +14,7 @@ default:
       - name: AWS_REGION
 
 stages:
-  - name: stacks-aks
+  - name: stacks-aci
     variables:
       - name: TF_FILE_LOCATION
         description: Path to the Terraform template files
@@ -36,31 +36,21 @@ stages:
         required: false
       - name: TF_VAR_resource_group_location
         description: Location that the cluster should be deployed to
-      - name: TF_VAR_dns_zone
-        description: Public DNS zone that should be used for URLs
-      - name: TF_VAR_internal_dns_zone
-        description: Private DNS zone for internal services
-      - name: TF_VAR_pfx_password
-        description: Password for the certificate deployed into Kubernetes
-      - name: TF_VAR_dns_resource_group
-        description: Resource group that contains the DNS zones to update
-      - name: TF_VAR_create_dns_zone
-        description: State if the DNS zone should be created
-      - name: TF_VAR_create_aksvnet
-        description: State if the virtual network for AKS should be created
-      - name: TF_VAR_cluster_version
-        description: Version of Kubernetes to deploy
+      - name: TF_VAR_container_group_name
+        description: Name of your Azure Container Group.
+      - name: TF_VAR_location
+        description: The location of the resource group
+      - name: TF_VAR_resource_group_name
+        description: The name of the resource group where the Azure Container Group and other new components (ACR, VNET) should be created or where the existing ACR is located.
       - name: TF_VAR_create_acr
-        description: State if a container registry should be created
-      - name: TF_VAR_acr_resource_group
-        description: Resource group that the ACR can be found if not being created
+        description: A boolean flag indicating whether to create a new Azure Container Registry (ACR). If set to true, a new ACR will be created; if set to false, an existing ACR will be used.
       - name: TF_VAR_acr_name
-        description: Name of the ACR to create
-      - name: TF_VAR_is_cluster_private
-        description: Can the API be accessed remotely
-      - name: TF_VAR_key_vault_name
-        description: Name of the key vault to create
-        required: false
-      - name: TF_VAR_acme_email
-        description: Email address for Acme certificate registration, must be a valid email
-      - name: TF_VAR_create_user_identity
+        description: The name of the new or existing Azure Container Registry (ACR).
+      - name: TF_VAR_acr_location
+        description: The location/region where the Azure Container Registry (ACR) should be created or where the existing ACR is located.
+      # - name: TF_VAR_
+      #   description:
+      # - name: TF_VAR_
+      #   description:
+      # - name: TF_VAR_
+      #   description:
