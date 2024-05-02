@@ -18,3 +18,5 @@ outputs
 
 deploy/terraform/*.tfvars
 deploy/terraform/*.tfplan
+
+localEnvVariables
