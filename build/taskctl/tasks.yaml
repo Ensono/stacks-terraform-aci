@@ -93,36 +93,38 @@ tasks:
     command:
       - Invoke-Inspec -vendor -args "--overwrite"
 
+  # Need to change this to work for ACI
   tests:infra:run:
     context: infratests
     description: Execute infrastructure tests against deployed Cloud resources
     command:
       - |
         Import-Module Az.Aks
-        Invoke-Terraform -Workspace -Arguments $env:TF_VAR_name_environment -Path $env:TF_FILE_LOCATION
-        Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value" -passthru | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml
-        Get-AzureServiceVersions -service aks -location $env:TF_VAR_resource_group_location | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml -Append
-        Add-Content -Path ${PWD}/inspec_inputs.yml -Value "region: ${env:TF_VAR_resource_group_location}"
-        Add-Content -Path ${PWD}/inspec_inputs.yml -Value "kubernetes_private_cluster: ${env:TF_VAR_is_cluster_private}"
-        Invoke-Inspec -execute -arguments "--input-file ${PWD}/inspec_inputs.yml"
+        # Invoke-Terraform -Workspace -Arguments $env:TF_VAR_name_environment -Path $env:TF_FILE_LOCATION
+        # Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value" -passthru | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml
+        # Get-AzureServiceVersions -service aks -location $env:TF_VAR_resource_group_location | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml -Append
+        # Add-Content -Path ${PWD}/inspec_inputs.yml -Value "region: ${env:TF_VAR_resource_group_location}"
+        # Add-Content -Path ${PWD}/inspec_inputs.yml -Value "kubernetes_private_cluster: ${env:TF_VAR_is_cluster_private}"
+        # Invoke-Inspec -execute -arguments "--input-file ${PWD}/inspec_inputs.yml"
 
+  # Need to change this if we aaren't using helm for container management
   helm:charts:
     context: powershell
     description: Deploy Helm charts to the cluster as defined by configuration file
     command:
       - |
         Import-Module Az.Aks
-        Invoke-Terraform -Init -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_INIT -debug
-        Invoke-Terraform -Workspace -Arguments $env:TF_VAR_name_environment -Path $env:TF_FILE_LOCATION
-        Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value"
-        /app/build/scripts/Deploy-Charts.ps1 `
-              -Path /app/deploy/helm/k8s_apps.yml `
-              -ResourceGroup ${env:TFOUT_resource_group_name} `
-              -Clustername ${env:TFOUT_aks_cluster_name} `
-              -Provider ${env:CLOUD_PLATFORM}
+        # Invoke-Terraform -Init -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_INIT -debug
+        # Invoke-Terraform -Workspace -Arguments $env:TF_VAR_name_environment -Path $env:TF_FILE_LOCATION
+        # Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value"
+        # /app/build/scripts/Deploy-Charts.ps1 `
+        #       -Path /app/deploy/helm/k8s_apps.yml `
+        #       -ResourceGroup ${env:TFOUT_resource_group_name} `
+        #       -Clustername ${env:TFOUT_aks_cluster_name} `
+        #       -Provider ${env:CLOUD_PLATFORM}
 
   _docs:
-    description: Build Docs for AKS
+    description: Build Docs for ACI
     context: docsenv
     command: |
       /app/build/scripts/New-Glossary.ps1 -docpath /app/docs -path /app/tmp/glossary.adoc
