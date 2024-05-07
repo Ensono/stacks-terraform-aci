@@ -26,8 +26,8 @@ stages:
   - stage: infrastructure_tests
 
     jobs:
-      - job: aks
-        displayName: AKS
+      - job: aci
+        displayName: ACI
         pool:
           vmImage: $(pool_vm_image)
 
@@ -44,11 +44,11 @@ stages:
               CHEF_LICENSE: $(CHEF_LICENSE)
               TESTS_PATH: /app/deploy/tests
               INSPEC_ARGS: "--input resource_group_name=$(resource_group_name) storage_account_name=$(storage_account_name) region=$(location)"
-              REPORT_FILENAME: inspec_azure_aks.xml
+              REPORT_FILENAME: inspec_azure_aci.xml
 
           - task: PublishTestResults@2
             inputs:
               testResultsFormat: JUnit
-              testResultsFiles: outputs/tests/inspec_azure_aks.xml
-              testRunTitle: AKS Tests
+              testResultsFiles: outputs/tests/inspec_azure_aci.xml
+              testRunTitle: ACI Tests
               failTaskOnFailedTests: true
