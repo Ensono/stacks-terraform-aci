@@ -42,13 +42,19 @@ tasks:
     context: powershell
     description: Plan Terraform
     command:
-      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_PLAN -Debug
+      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_PLAN,"-out=tfplan" -Debug
 
   infra:apply:
     context: powershell
     description: Apply Terraform
     command:
-      - Invoke-Terraform -Apply -Path "${env:TF_FILE_LOCATION}/deploy.tfplan"
+      - |
+        Push-Location $env:TF_FILE_LOCATION
+        if ($env:TFVAR_FILE) {
+          Invoke-Terraform -Apply -Path tfplan -Arguments "--var-file $env:TFVAR_FILE" -Debug
+        } else {
+          Invoke-Terraform -Apply -Path tfplan -Debug
+        }
 
   infra:destroy:plan:
     context: powershell
