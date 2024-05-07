@@ -74,7 +74,6 @@ tasks:
           Invoke-Terraform -Apply -Path destroy -Debug
         }
 
-
   infra:output:
     context: powershell
     description: Terraform Outputs
