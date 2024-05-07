@@ -1,0 +1,18 @@
+Fill these out in your envvars file:
+
+$resource_group_name = "test"
+$storage_account_name = "test"
+$location = "uksouth"
+
+$env:CHEF_LICENSE = "accept-silent"
+$env:TESTS_PATH = "/app/deploy/tests"
+$env:INSPEC_ARGS = "--input resource_group_name=$($resource_group_name) storage_account_name=$($storage_account_name) region=$($location)"
+$env:REPORT_FILENAME = "inspec_azure_aci.xml"
+
+Run this locally:
+
+taskctl tests
+
+Set up your ADO Pipeline using the infrastructure-tests.yml file in ./build/azuredevops/azure
+
+Ensure your tests & resource values are correct and able to test DEPLOYED Infrastructure
