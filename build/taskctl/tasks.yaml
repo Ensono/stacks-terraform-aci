@@ -60,13 +60,19 @@ tasks:
     context: powershell
     description: Destroy Environment.ShortName
     command:
-      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,${env:TF_BACKEND_DESTROY_PLAN}" -debug
+      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,-out='destroy'" -debug
 
   infra:destroy:apply:
     context: powershell
     description: Destroy Environment.ShortName
     command:
-      - Invoke-Terraform -Apply -Path "${env:TF_FILE_LOCATION}/destroy.tfplan" -Arguments "-destroy" -debug
+      - |
+        Push-Location $env:TF_FILE_LOCATION
+        if ($env:TFVAR_FILE) {
+          Invoke-Terraform -Apply -Path destroy -Arguments "--var-file $env:TFVAR_FILE" -Debug
+        } else {
+          Invoke-Terraform -Apply -Path destroy -Debug
+        }
 
 
   infra:output:
