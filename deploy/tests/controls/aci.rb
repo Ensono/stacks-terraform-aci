@@ -1,5 +1,5 @@
 
-# Reference documentation for the properties that are returned for ASK cluster
+# Reference documentation for the properties that are returned for ACI
 # https://learn.microsoft.com/en-us/rest/api/container-instances/container-groups/get?view=rest-container-instances-2023-05-01&tabs=HTTP
 
 control "azure-container-instances" do
