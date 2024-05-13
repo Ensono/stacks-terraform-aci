@@ -34,17 +34,17 @@ variables:
 
   # ------- Resource Group
   - name: resource_group_name
-    value: dantestRGado
+    value: exampleRG
 
   # ------- Container Group
   - name: container_group_name
-    value: dantestACGado
+    value: exampleACG
 
   # ------- Container registry
   - name: create_acr
     value: true
   - name: acr_name
-    value: dantestACRado
+    value: exampleACR
   - name: acr_location
     value: $(location)
 
