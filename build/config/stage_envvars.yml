@@ -48,9 +48,3 @@ stages:
         description: The name of the new or existing Azure Container Registry (ACR).
       - name: TF_VAR_acr_location
         description: The location/region where the Azure Container Registry (ACR) should be created or where the existing ACR is located.
-      # - name: TF_VAR_
-      #   description:
-      # - name: TF_VAR_
-      #   description:
-      # - name: TF_VAR_
-      #   description:

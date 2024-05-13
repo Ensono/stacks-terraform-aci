@@ -1,5 +1,5 @@
 ---
-id: aks_glossary
+id: aci_glossary
 title: Glossary
 description: A table of terms that have been discussed in this section.
 weight: 70

@@ -1,7 +1,7 @@
 ---
-id: aks_infrastructure
+id: aci_infrastructure
 title: Infrastructure
-description: Details about how the architecture of the AKS resources
+description: Details about how the architecture of the ACI resources
 weight: 30
 ---
 
@@ -12,15 +12,15 @@ All of the infrastructure that is deployed to Azure, is done using Terraform. Th
 The following diagram depicts the resources that are deployed.
 
 .Azure Resources
-image::images/aks_infrastructure.png[]
+image::images/aci_basic_infrastructure.png[]
 
 NOTE: The diagram shown is generated from a prototype diagram as configuration so may not be 100% accurate yet.
 
-The deployment of the resources is performed using the Ensono Digital AKS module as found in the https://github.com/amido/stacks-terraform[Stacks Terraform] repository.
+The deployment of the resources is performed using the Ensono Digital ACI module as found in the https://github.com/ensono/terraform-azurerm-aci[Ensono Terraform ACI] repository.
 
 === Terraform Outputs
 
-A number of outputs from Terraform are required in other parts of the pipeline, for example when deploying Helm charts to the cluster.
+A number of outputs from Terraform are required in other parts of the pipeline, such as testing Infrastructure with InSpec.
 
 A new PowerShell cmdlet has been created called `Set-EnvironmentVars` which allows any JSON string to be passed and for it to be interpreted and the name and value to be turned into environment variables. The option to pass the date through is also available so that a simple key value pair is passed along the pipeline.
 

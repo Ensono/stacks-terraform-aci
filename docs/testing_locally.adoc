@@ -1,3 +1,10 @@
+---
+id: aci_testing_locally
+title: Testing Infrastructure Locally
+description: To keep the resources in a known configuration and assist in keeping the necessary versions of software, e.g. Azure Container Instances, up to date the project contains infrastructure tests. 
+weight: 70
+---
+
 == How to Locally Test via Inspec
 
 Ensure that your taskctl envfile OR environment variables contain the following values:
@@ -32,7 +39,7 @@ taskctl tests envfile
 taskctl tests
 ```
 
-=== Things to check:
+=== Things to check
 
 * Your tests are located in the `~/deploy/tests/controls` directory and your `inspec.yml` has the correct inputs, for example:
 ```yaml
@@ -45,4 +52,4 @@ inputs:
   - name: container_group_name
     description: Name of the container group
 ```
-* Your infrastructure has been deployed, as Inspec is testing against LIVE Infrastructure!
+* Your infrastructure has been deployed, as Inspec is testing against LIVE Infrastructure via Inspec Train & the Azure REST API - Read more here: https://github.com/inspec/inspec-azure!

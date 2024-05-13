@@ -42,7 +42,12 @@ tasks:
     context: powershell
     description: Plan Terraform
     command:
-      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_PLAN,"-out=tfplan" -Debug
+      - |
+        if ($env:TF_BACKEND_PLAN) {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_PLAN -Debug
+        } else {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-input=false,-out=\"tfplan\"" -Debug
+        }
 
   infra:apply:
     context: powershell
@@ -60,7 +65,12 @@ tasks:
     context: powershell
     description: Destroy Environment.ShortName
     command:
-      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,-out='destroy'" -debug
+      - |
+        if ($env:TF_BACKEND_DESTROY_PLAN) {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,$env:TF_BACKEND_DESTROY_PLAN" -Debug
+        } else {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,-input=false,-out=\"destroy\"" -Debug
+        }
 
   infra:destroy:apply:
     context: powershell
