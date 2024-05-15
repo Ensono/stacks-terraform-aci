@@ -1,8 +1,8 @@
 variables:
   # ------- General Agent Setup
-  # set the location that the resources should be deployed to
-  - name: location
-    value: uksouth
+  # set the region that the resources should be deployed to
+  - name: region
+    value: westeurope
 
   # ------- Stacks configuration
   # name of the company that owns the project
@@ -30,7 +30,7 @@ variables:
   - name: tf_state_container
     value: tfstate
   - name: tf_state_key
-    value: acitest
+    value: acicore
 
   # ------- Resource Group
   - name: resource_group_name
