@@ -18,7 +18,7 @@ supports:
 inputs:
   - name: resource_group_name
     description: Group containing all the resources for the Azure Kubernertes Cluster
-  - name: location
+  - name: region
     description: location that the resources are expected to be deployed into
   - name: container_group_name
     description: Name of the container group
