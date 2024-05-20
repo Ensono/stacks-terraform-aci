@@ -1,11 +1,11 @@
-name: stacks-infrastructure-aks
-title: Stacks Infrastructure AKS
+name: stacks-infrastructure-aci
+title: Stacks Infrastructure ACI
 maintainer: Ensono Digital
 copyright: Ensono Digital
 copyright_email: stacks@ensono.com
 license: Apache-2.0
 summary: |
-  A profile to test that the infrastructure for AKS has been setup as expected
+  A profile to test that the infrastructure for ACI has been setup as expected
 version: 0.1.0
 inspec_version: ">= 2.2.7"
 depends:
@@ -19,10 +19,6 @@ inputs:
   - name: resource_group_name
     description: Group containing all the resources for the Azure Kubernertes Cluster
   - name: region
-    description: Region that the resources are expected to be deployed into
-  - name: dns_prefix
-    description: DNS Prefix to be used with Kubernetes
-    value: aks
-  - name: k8s_version_threshold
-    description: Denotes the number versions that are considered valid
-    value: 4
+    description: location that the resources are expected to be deployed into
+  - name: container_group_name
+    description: Name of the container group

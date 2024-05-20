@@ -42,26 +42,47 @@ tasks:
     context: powershell
     description: Plan Terraform
     command:
-      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_PLAN -Debug
+      - |
+        if ($env:TF_BACKEND_PLAN) {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_PLAN -Debug
+        } else {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-input=false,'-out=tfplan'" -Debug
+        }
 
   infra:apply:
     context: powershell
     description: Apply Terraform
     command:
-      - Invoke-Terraform -Apply -Path "${env:TF_FILE_LOCATION}/deploy.tfplan"
+      - |
+        Push-Location $env:TF_FILE_LOCATION
+        if ($env:TFVAR_FILE) {
+          Invoke-Terraform -Apply -Path tfplan -Arguments "--var-file $env:TFVAR_FILE" -Debug
+        } else {
+          Invoke-Terraform -Apply -Path tfplan -Debug
+        }
 
   infra:destroy:plan:
     context: powershell
     description: Destroy Environment.ShortName
     command:
-      - Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,${env:TF_BACKEND_DESTROY_PLAN}" -debug
+      - |
+        if ($env:TF_BACKEND_DESTROY_PLAN) {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,$env:TF_BACKEND_DESTROY_PLAN" -Debug
+        } else {
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,-input=false,-out='destroy'" -Debug
+        }
 
   infra:destroy:apply:
     context: powershell
     description: Destroy Environment.ShortName
     command:
-      - Invoke-Terraform -Apply -Path "${env:TF_FILE_LOCATION}/destroy.tfplan" -Arguments "-destroy" -debug
-
+      - |
+        Push-Location $env:TF_FILE_LOCATION
+        if ($env:TFVAR_FILE) {
+          Invoke-Terraform -Apply -Path destroy -Arguments "--var-file $env:TFVAR_FILE" -Debug
+        } else {
+          Invoke-Terraform -Apply -Path destroy -Debug
+        }
 
   infra:output:
     context: powershell
@@ -98,31 +119,17 @@ tasks:
     description: Execute infrastructure tests against deployed Cloud resources
     command:
       - |
-        Import-Module Az.Aks
-        Invoke-Terraform -Workspace -Arguments $env:TF_VAR_name_environment -Path $env:TF_FILE_LOCATION
-        Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value" -passthru | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml
-        Get-AzureServiceVersions -service aks -location $env:TF_VAR_resource_group_location | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml -Append
-        Add-Content -Path ${PWD}/inspec_inputs.yml -Value "region: ${env:TF_VAR_resource_group_location}"
-        Add-Content -Path ${PWD}/inspec_inputs.yml -Value "kubernetes_private_cluster: ${env:TF_VAR_is_cluster_private}"
+        Import-Module Az.ContainerInstance
+        # TODO: Remove below for now until correct outputs from the TF Module itself
+        # Invoke-Terraform -Workspace -Arguments $env:TF_VAR_name_environment -Path $env:TF_FILE_LOCATION
+        # Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value" -passthru | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml
+        Set-Content -Path "${PWD}/inspec_inputs.yml" -Value ""
+        Add-Content -Path ${PWD}/inspec_inputs.yml -Value "resource_group_name: ${env:TF_VAR_resource_group_name}"
+        Add-Content -Path ${PWD}/inspec_inputs.yml -Value "location: ${env:TF_VAR_location}"
         Invoke-Inspec -execute -arguments "--input-file ${PWD}/inspec_inputs.yml"
 
-  helm:charts:
-    context: powershell
-    description: Deploy Helm charts to the cluster as defined by configuration file
-    command:
-      - |
-        Import-Module Az.Aks
-        Invoke-Terraform -Init -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_INIT -debug
-        Invoke-Terraform -Workspace -Arguments $env:TF_VAR_name_environment -Path $env:TF_FILE_LOCATION
-        Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value"
-        /app/build/scripts/Deploy-Charts.ps1 `
-              -Path /app/deploy/helm/k8s_apps.yml `
-              -ResourceGroup ${env:TFOUT_resource_group_name} `
-              -Clustername ${env:TFOUT_aks_cluster_name} `
-              -Provider ${env:CLOUD_PLATFORM}
-
   _docs:
-    description: Build Docs for AKS
+    description: Build Docs for ACI
     context: docsenv
     command: |
       /app/build/scripts/New-Glossary.ps1 -docpath /app/docs -path /app/tmp/glossary.adoc

@@ -1,4 +1,5 @@
-# copyright: 2018, The Authors
+# Inspec Documentation for further testing development:
+## https://docs.chef.io/inspec/resources/azure_resource_group/
 
 title "Resource Group"
 
@@ -8,5 +9,4 @@ describe azure_resource_group(name: input("resource_group_name")) do
   it { should exist }
   its("location") { should cmp input("region") }
   its("properties.provisioningState") { should cmp "Succeeded" }
-  its("tags") { should include(:created_by) }
 end

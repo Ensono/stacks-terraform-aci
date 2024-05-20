@@ -1,5 +1,5 @@
 ---
-id: aks_pipeline
+id: aci_pipeline
 title: Pipeline
 description: There are a number of pipelines in the project, but the main one is the Ensono Digital Independent Runner (EDIR). Regardless of the CI/CD system in use, EDIR is always called. Currently only Azure DevOps is supported but there will be pipelines for GitHub Actions and Gitlab Runner in the future.
 weight: 60
@@ -38,7 +38,6 @@ Currently knows how to set the build number for Azure DevOps.
 | `tests:infra:init` | Initialse the Inspec test profile. 
 | `tests:infra:vendor` | This will analyse the profile and download the required providers to run the tests
 | `tests:infra:run` | Execute infrastructure tests against the deployed Cloud Resources using Inspec
-| `helm:charts` | Deploy enabled charts to the Kubernetes cluster. More information can be found in the <<Helm>> section.
 | `_docs` | Create a PDF file of the documentation.
 | `_release` | Create a tag in the GitHub repo when the code is run on the main branch
 |===
@@ -112,7 +111,7 @@ image::images/ado_portal_pipeline_run.png[width=300]
 [source,bash]
 ----
 az pipelines run \
-    --name "amido.stacks-infrastructure-aks (1)" \
+    --name "ensono.stacks-infrastructure-aci (1)" \
     --branch feature/independent-runner \
     --output table \
     --parameters destroy=true

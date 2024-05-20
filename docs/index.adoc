@@ -9,7 +9,7 @@
 
 :company: Ensono
 
-= Ensono Stacks - AKS Cluster
+= Ensono Stacks - Azure Container Instances
 
 include::_index.adoc[]
 
@@ -23,13 +23,11 @@ include::getting_started.adoc[]
 
 <<<
 
-include::helm.adoc[]
-
-<<<
-
 include::pipeline.adoc[]
 
 <<<
+
+include::testing_locally.adoc[]
 
 include::tests.adoc[]
 

@@ -1,6 +1,6 @@
 variables:
   # ------- General Agent Setup
-  # set the location that the resources should be deployed to
+  # set the region that the resources should be deployed to
   - name: region
     value: westeurope
 
@@ -18,32 +18,6 @@ variables:
   - name: domain
     value: core
 
-  # the email address to use when creating the SSL certificate
-  - name: acme_email
-    value: stacks@amido.com
-
-  # -------- Cluster information
-  # version of AKS to deploy
-  - name: aks_cluster_version
-    value: 1.26.12
-
-  # Should a valid certificate be obtained, or use a self signed one
-  - name: create_valid_cert
-    value: false
-
-  # Additional node pools for kubernetes
-  - name: aks_node_pools
-    value: '{"apps": {"vm_size": "Standard_DS2_V2", "auto_scaling": true, "min_nodes": 1, "max_nodes": 10}}'
-
-  - name: private_cluster
-    value: true
-
-  - name: create_aksvnet
-    value: true
-
-  - name: create_user_identity
-    value: true
-
   # -------- Terraform remote state
   # Stacks operates Terraform states based on workspaces **IT IS VERY IMPORTANT** that you ensure a unique name for each application definition
   # Furthermore **IT IS VERY IMPORTANT** that you change the name of a workspace for each deployment stage
@@ -56,31 +30,19 @@ variables:
   - name: tf_state_container
     value: tfstate
   - name: tf_state_key
-    value: core
+    value: acicore
 
-  # -------- Network Domain names
-  - name: base_domain_nonprod
-    value: nonprod.stacks.ensono.com
-  - name: base_domain_internal_nonprod
-    value: nonprod.stacks.ensono.internal
-  - name: base_domain_prod
-    value: prod.stacks.ensono.com
-  - name: base_domain_internal_prod
-    value: prod.stacks.ensono.internal
-
-  # ------- DNS configuration
-  - name: create_dns_zone
-    value: false
-  - name: dns_resource_group
-    value: stacks-ancillary-resources
+  # ------- Resource Group
+  - name: resource_group_name
+    value: exampleRG
 
   # ------- Container registry
   - name: create_acr
-    value: false
-  - name: acr_resource_group
-    value: stacks-ancillary-resources
+    value: true
   - name: acr_name
-    value: ensonodigitaleuw
+    value: exampleACR
+  - name: acr_location
+    value: $(region)
 
   # ------ Key Vault
   - name: create_key_vault
@@ -94,7 +56,7 @@ variables:
   - name: OWNER
     value: ensono
   - name: REPOSITORY
-    value: stacks-infrastructure-aks
+    value: stacks-infrastructure-aci
   - name: ARTIFACTS_DIR
     value: artifacts/
 
