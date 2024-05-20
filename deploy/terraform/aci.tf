@@ -1,5 +1,5 @@
 module "aci" {
-  source = "git::https://github.com/Ensono/terraform-azurerm-aci?ref=v0.1.1-alpha"
+  source = "git::https://github.com/Ensono/terraform-azurerm-aci?ref=v0.1.2-alpha"
 
   # Azure Container Group (For Container Apps/Instances)
   container_group_name = module.default_label.id
