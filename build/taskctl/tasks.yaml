@@ -46,7 +46,7 @@ tasks:
         if ($env:TF_BACKEND_PLAN) {
           Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments $env:TF_BACKEND_PLAN -Debug
         } else {
-          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-input=false,-out=\"tfplan\"" -Debug
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-input=false,'-out=tfplan'" -Debug
         }
 
   infra:apply:
@@ -69,7 +69,7 @@ tasks:
         if ($env:TF_BACKEND_DESTROY_PLAN) {
           Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,$env:TF_BACKEND_DESTROY_PLAN" -Debug
         } else {
-          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,-input=false,-out=\"destroy\"" -Debug
+          Invoke-Terraform -Plan -Path $env:TF_FILE_LOCATION -Arguments "-destroy,-input=false,-out='destroy'" -Debug
         }
 
   infra:destroy:apply:
@@ -125,7 +125,6 @@ tasks:
         # Invoke-Terraform -Output -Path $env:TF_FILE_LOCATION | /app/build/scripts/Set-EnvironmentVars.ps1 -prefix "TFOUT" -key "value" -passthru | ConvertTo-Yaml | Out-File -Path ${PWD}/inspec_inputs.yml
         Set-Content -Path "${PWD}/inspec_inputs.yml" -Value ""
         Add-Content -Path ${PWD}/inspec_inputs.yml -Value "resource_group_name: ${env:TF_VAR_resource_group_name}"
-        Add-Content -Path ${PWD}/inspec_inputs.yml -Value "container_group_name: ${env:TF_VAR_container_group_name}"
         Add-Content -Path ${PWD}/inspec_inputs.yml -Value "location: ${env:TF_VAR_location}"
         Invoke-Inspec -execute -arguments "--input-file ${PWD}/inspec_inputs.yml"
 

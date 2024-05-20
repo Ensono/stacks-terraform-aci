@@ -3,6 +3,7 @@
 .terraform
 .terraform.lock.hcl
 tfplan
+destroy
 
 local
 
@@ -20,3 +21,4 @@ deploy/terraform/*.tfvars
 deploy/terraform/*.tfplan
 
 localEnvVariables
+envfile_*

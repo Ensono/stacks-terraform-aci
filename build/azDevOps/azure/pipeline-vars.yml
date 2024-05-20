@@ -36,17 +36,13 @@ variables:
   - name: resource_group_name
     value: exampleRG
 
-  # ------- Container Group
-  - name: container_group_name
-    value: exampleACG
-
   # ------- Container registry
   - name: create_acr
     value: true
   - name: acr_name
     value: exampleACR
   - name: acr_location
-    value: $(location)
+    value: $(region)
 
   # ------ Key Vault
   - name: create_key_vault

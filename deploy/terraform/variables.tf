@@ -1,11 +1,39 @@
-variable "container_group_name" {
-  type        = string
-  description = "Name of the Azure Container Group"
+variable "name_company" {
+  type = string
+}
+
+variable "name_component" {
+  type    = string
+  default = "aci"
+}
+
+variable "name_project" {
+  type = string
+}
+
+variable "stage" {
+  type = string
 }
 
 variable "location" {
   type        = string
   description = "Location of the Azure Resource Group"
+}
+
+variable "location_name_map" {
+  type = map(string)
+
+  default = {
+    northeurope   = "eun"
+    westeurope    = "euw"
+    uksouth       = "uks"
+    ukwest        = "ukw"
+    eastus        = "use"
+    eastus2       = "use2"
+    westus        = "usw"
+    eastasia      = "ase"
+    southeastasia = "asse"
+  }
 }
 
 variable "resource_group_name" {
@@ -62,4 +90,9 @@ variable "subnet_names" {
   type        = list(string)
   default     = null
   description = "List of names of new OR existing subnets to integrate into the Azure Container Group. If integrate_virtual_network and create_virtual_network is set to true you MUST provide this."
+}
+
+variable "attributes" {
+  type    = list(string)
+  default = []
 }
